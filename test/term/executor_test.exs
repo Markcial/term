@@ -3,42 +3,24 @@ defmodule Term.ExecutorTest do
   doctest Term.Executor
 
   @commands [
-    single_line: [
-      command: "ls", args: [], out: "a\n", expected: "a",
-    ],
-    multiline: [
-      command: "ls", args: ["-la"], out: "a\nb\nc\n", expected: ["a", "b", "c"],
-    ]
+    [command: "ls", args: [], out: {"a\n", 0}, expected: "a"],
+    [command: "ls", args: ["-la"], out: {"a\nb\nc\n", 0}, expected: ["a", "b", "c"]]
   ]
 
-  @stubs @commands |> Enum.each(fn 
-    {name, params = [command: command, args: args, out: out, expected: expected]} -> 
-      quote do
-          defmodule unquote(name |> to_string |> String.capitalize ) do
-          use Term.Executor
-          use ExUnit.Case
+  use Term.Executor
 
-          defp sanytize(text) do
-            assert text == unquote(expected)
-          end
+  @commands |> Enum.each(fn command: command, args: args, out: out, expected: expected -> 
+    test "testing command #{command} with args #{args}" do
+      defmodule SysMock do
+        def cmd(cmd, args, _cmd_opts \\ []) do
+          send self(), [cmd, args]
 
-          defp unquote(:execute)(cmd, params, _) do
-            assert cmd == unquote(command)
-            assert params == unquote(args)
-            {unquote(out), 0}
-          end
+          unquote(out)
         end
+      end
+
+      assert exec!(unquote(command), unquote(args), sys: SysMock) == unquote(expected)
+      assert_received [unquote(command), unquote(args)]
     end
   end)
-
-  setup do
-    @stubs
-  end
-
-  test "Command with single line" do
-    Single_line.exec! "ls", []
-    # stub.exec!(params) 
-    #assert exec!(unquote(command), unquote(args)) == unquote(expected)
-  end
-
 end

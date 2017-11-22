@@ -5,11 +5,34 @@ defmodule Term.Formatter do
       @styles Application.get_env(:term, :styles)
       @labels @styles |> Keyword.keys
 
+      use Term.Writer
+
+      @doc """
+      Returns all the available styles, currently available:
+
+      #{@styles |> inspect}
+      """
       def styles, do: @styles
+
+      @doc """
+      Returns all the available labels, currently available:
+
+      #{inspect(@labels)}
+      """
       def labels, do: @labels
-      def label?(which), do: which in labels()
+
+      @doc """
+      Checks if the label exists in the configuration, being one of the following : **#{@labels |> Enum.map(&Atom.to_string/1) |> Enum.join(", ")}**
+      """
+      def label?(which) when which in @labels, do: true
+      def label?(_), do: false
 
       for lbl <- @labels do
+        @doc """
+        Displays a message with the labelled #{lbl} format.
+        
+        >>> #{inspect(@styles[lbl])}
+        """
         def unquote(lbl)(message) do
           log(unquote(lbl), message)
         end
@@ -42,14 +65,14 @@ defmodule Term.Formatter do
       end
 
       def log(label, text) do
-        format(label, text) |> write
+        label |> 
+          format(text) |> 
+          write
       end
 
       def separator(char \\ "=", width \\ 80) do
         String.duplicate(char, width)
       end
-
-      defp write(text), do: IO.puts(text)
 
       defoverridable style: 1, format: 2
     end

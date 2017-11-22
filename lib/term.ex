@@ -8,6 +8,4 @@ defmodule Term do
   use Term.Reader
   use Term.Executor
 
-  def before_write(text), do: "WTF?! #{text}"
-
 end

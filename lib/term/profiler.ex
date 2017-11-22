@@ -7,11 +7,8 @@ defmodule Term.Profiler do
     end
 
     def init(state) do
-      IO.inspect state
-      IO.puts "init"
       {:ok, pid} = :os_mon.start(:cpu_sup, true)
       state = %{:cpu => pid}
-      IO.inspect state
       {:ok, state}
     end
   end

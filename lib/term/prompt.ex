@@ -22,8 +22,6 @@ defmodule Term.Prompt do
         options = choices(options)
 
         answer = prompt(subject)
-
-        IO.inspect(answer)
       end
 
       def choices(options), do: options

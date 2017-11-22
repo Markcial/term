@@ -11,6 +11,7 @@ defmodule Term.Mixfile do
       name: "Term",
       source_url: "https://github.com/markcial/term",
       homepage_url: "http://github.com/markcial/term",
+      test_coverage: [tool: Coverex.Task, log: :debug],
       # The main page in the docs
       docs: [
         main: "Term",
@@ -31,7 +32,9 @@ defmodule Term.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:coverex, "~> 1.4.10", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
+      {:inch_ex, "~> 0.5.6", only: [:dev, :test], runtime: false},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.16", only: [:dev, :test], runtime: false}
     ]
