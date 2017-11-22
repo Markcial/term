@@ -4,7 +4,7 @@ defmodule Term.Mixfile do
   def project do
     [
       app: :term,
-      version: "0.1.0",
+      version: "0.1.2",
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -12,11 +12,25 @@ defmodule Term.Mixfile do
       source_url: "https://github.com/markcial/term",
       homepage_url: "http://github.com/markcial/term",
       test_coverage: [tool: Coverex.Task, log: :debug],
+      aliases: aliases(),
+      preferred_cli_env: [
+        pipeline: :test
+      ],
       # The main page in the docs
       docs: [
         main: "Term",
         # logo: "path/to/logo.png",
         extras: ["README.md"]
+      ]
+    ]
+  end
+
+  defp aliases do
+    [
+      pipeline: [
+        "deps.get", "deps.compile", # dependencies
+        "test --raise --cover", "dialyzer", # tests and typecheck
+        "inch" # refactor advice
       ]
     ]
   end

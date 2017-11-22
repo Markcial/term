@@ -1,4 +1,7 @@
 defmodule Term.Prompt do
+  @callback prompt(String.t) :: String.t
+  @callback prompted(String.t) :: String.t
+  
 
   defmacro __using__(_) do
     quote do

@@ -2,8 +2,10 @@ defmodule Term.Executor do
 
   @type stdout :: String.t | [String.t]
 
-  @callback exec!(String.t(), List.t()) :: stdout 
-  @callback exec(String.t(), List.t()) :: String.t() | [String.t]
+  @callback exec!(String.t(), []) :: stdout 
+  @callback exec(String.t(), []) :: {:err, any()} | {:ok, stdout}
+
+  @callback sanytize(stdout) :: stdout
 
   defmacro __using__(_) do
     quote do
