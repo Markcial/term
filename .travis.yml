@@ -3,18 +3,16 @@ language: elixir
 elixir:
   - 1.5.0
 otp_release:
-  - 18.0
-  - 18.1
-  - 18.2
   - 19.0
+  - 20.0
 after_script:
   - mix deps.get --only docs
   - mix deps.get --only test
   - MIX_ENV=test mix pipeline
-  - MIX_ENV=test mix credo --strict || true
-  - MIX_ENV=test mix inch.report
-  - MIX_ENV=docs mix deps.get
-  - MIX_ENV=docs mix inch.report
+#  - MIX_ENV=test mix credo --strict || true
+#  - MIX_ENV=test mix inch.report
+#  - MIX_ENV=docs mix deps.get
+#  - MIX_ENV=docs mix inch.report
 notifications:
   email:
     on_success: never
